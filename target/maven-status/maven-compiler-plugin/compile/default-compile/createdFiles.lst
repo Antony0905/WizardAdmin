@@ -1,0 +1,7 @@
+com\everis\wizardadmin\model\Query.class
+com\everis\wizardadmin\utils\QueryUtils.class
+com\everis\wizardadmin\constants\WizardConstants.class
+com\everis\wizardadmin\servlets\QueryController.class
+com\everis\wizardadmin\dao\QueryDao.class
+com\everis\wizardadmin\service\QueryService.class
+com\everis\wizardadmin\connectionfactory\ConnectionFactory.class
