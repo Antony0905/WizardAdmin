@@ -33,16 +33,23 @@ public class QueryController extends HttpServlet {
 
 		Query returnQuery = new Query();
 		QueryService service = new QueryService();
-
+		String operacao = null;
 		String pagina = request.getParameter("pagina");
 		returnQuery.setPagInicio(Integer.parseInt(request.getParameter("paginaInicio")));
 		returnQuery.setPagFim(Integer.parseInt(request.getParameter("paginaFim")));
 
 		returnQuery = QueryUtils.validarPagina(pagina, returnQuery);
 		returnQuery.setSql(request.getParameter("textAreaQuery"));
-		String operacao = returnQuery.getSql().toUpperCase().substring(0, 6);
+
+		try {
+			operacao = returnQuery.getSql().toUpperCase().substring(0, 6);
+		} catch (Exception e) {
+			operacao = "ERROR";
+		}
 
 		HttpSession sessao = request.getSession();
+
+		returnQuery.setSql(returnQuery.getSql().replace(";", ""));
 
 		if (operacao.equals(WizardConstants.INSERT) || operacao.equals(WizardConstants.DELETE)
 				|| operacao.equals(WizardConstants.UPDATE)) {

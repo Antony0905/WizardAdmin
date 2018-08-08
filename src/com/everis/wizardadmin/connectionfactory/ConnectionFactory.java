@@ -20,7 +20,7 @@ public class ConnectionFactory {
 	private String url = "jdbc:oracle:thin:@10.129.181.149:1521:FOPAQA1";
 	private String Driver = "oracle.jdbc.driver.OracleDriver";
 
-	public Connection getConnection() {
+	/*public Connection getConnection() {
 
 		try {
 			Class.forName(Driver);
@@ -31,21 +31,32 @@ public class ConnectionFactory {
 			e.printStackTrace();
 		}
 		return null;
+	}*/
+
+	public Connection getConnection() {
+
+		Context ctx = null;
+		Hashtable ht = new Hashtable();
+		Connection conn = null;
+		try {
+			ht.put(Context.INITIAL_CONTEXT_FACTORY, "weblogic.jndi.WLInitialContextFactory");
+			ctx = new InitialContext(ht);
+			javax.sql.DataSource ds = (javax.sql.DataSource) ctx.lookup("FOPAQA1_Pool");
+			conn = ds.getConnection();
+			while (conn.isClosed()) {
+				conn = ds.getConnection();
+			}
+			conn.setAutoCommit(false);
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		} catch (NamingException e) {
+			e.printStackTrace();
+		} finally {
+
+		}
+		return conn;
+
 	}
 
-	/*
-	 * public Connection getConnection() {
-	 * 
-	 * Context ctx = null; Hashtable ht = new Hashtable(); Connection conn = null;
-	 * try { ht.put(Context.INITIAL_CONTEXT_FACTORY,
-	 * "weblogic.jndi.WLInitialContextFactory"); ctx = new InitialContext(ht);
-	 * javax.sql.DataSource ds = (javax.sql.DataSource) ctx.lookup("FOPAQA1_Pool");
-	 * conn = ds.getConnection(); while (conn.isClosed()) { conn =
-	 * ds.getConnection(); } conn.setAutoCommit(false); } catch (SQLException e) {
-	 * conn = null;
-	 * 
-	 * } catch (NamingException e) { conn = null; } finally { } return conn;
-	 * 
-	 * }
-	 */
 }
